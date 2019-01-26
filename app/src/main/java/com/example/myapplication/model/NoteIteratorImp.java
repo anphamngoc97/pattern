@@ -5,9 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.print.PrinterId;
 
-public class NoteModel {
+import java.util.ArrayList;
+
+public class NoteIteratorImp implements NoteIterator  {
+
+    ArrayList<Note> notes = new ArrayList<>();
+
     private final String DB_NAME= "NOTE_DB";
     private final String TABLE_NAME= "NOTE";
     private final int VERSION = 1;
@@ -16,7 +20,8 @@ public class NoteModel {
 
     SQLiteDatabase database;
 
-    public NoteModel(Context context){
+
+    public  NoteIteratorImp (Context context){
         SQLiteOpenHelper helper = new SQLiteOpenHelper(context,DB_NAME,null,VERSION) {
             @Override
             public void onCreate(SQLiteDatabase db) {
@@ -35,14 +40,14 @@ public class NoteModel {
 
 
     }
-    public long addNote(ContentValues values){
+    public long addTask(ContentValues values){
         long id = database.insert(TABLE_NAME,null,values);
         return id;
 
 
     }
-    public void delTask(String whereClause,long id){
-        database.delete(TABLE_NAME,whereClause +" = " + id,null);
+    public void delTask(String whereClause){
+        database.delete(TABLE_NAME,whereClause,null);
     }
     public Cursor getAll(){
         Cursor cursor = database.query(TABLE_NAME,null,
@@ -50,5 +55,42 @@ public class NoteModel {
 
         return cursor;
     }
+
+    @Override
+    public void load(LoadItemListener loadItemListener) {
+        Cursor cursor = getAll();
+
+        notes.clear();
+        if(cursor.moveToFirst()){
+            while (cursor.moveToNext()){
+
+                Note note = new Note(cursor.getString(1),cursor.getLong(0));
+                notes.add(note);
+            }
+        }
+
+        loadItemListener.onLoadFinish(notes);
+    }
+
+    @Override
+    public long addNote(LoadItemListener itemListener, String title) {
+        ContentValues values = new ContentValues();
+        values.put(columns[1],title);
+
+        long id = addTask(values);
+
+        notes.add(new Note(title,id));
+
+        itemListener.onChangeFinish();
+        return id;
+    }
+
+    @Override
+    public void delNote(LoadItemListener itemListener, int position) {
+        delTask(columns[0]+ " = " + notes.get(position).getId());
+        notes.remove(position);
+        itemListener.onChangeFinish();
+    }
+
 
 }

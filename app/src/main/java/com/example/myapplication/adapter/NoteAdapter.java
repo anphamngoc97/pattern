@@ -1,5 +1,6 @@
 package com.example.myapplication.adapter;
 
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.entities.Note;
+import com.example.myapplication.model.Note;
+import com.example.myapplication.presenter.NoteItemListener;
 
 import java.util.ArrayList;
 
@@ -20,9 +22,9 @@ import butterknife.ButterKnife;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.Holder> {
     ArrayList<Note> notes;
     Context context;
-    OnClickItem onClickItem;
+    NoteItemListener onClickItem;
 
-    public NoteAdapter(ArrayList<Note> notes, Context context, OnClickItem onClickItem) {
+    public NoteAdapter(ArrayList<Note> notes, Context context, NoteItemListener onClickItem) {
         this.notes = notes;
         this.context = context;
         this.onClickItem = onClickItem;
@@ -54,8 +56,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.Holder> {
         public Holder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            btnDel.setOnClickListener(v-> onClickItem.onRemoveClick(getAdapterPosition()));
+            btnDel.setOnClickListener(v-> onClickItem.onRemove(getAdapterPosition()));
             txtvNote.setOnClickListener(v->onClickItem.onTextClick(txtvNote));
         }
     }
 }
+

@@ -1,12 +1,13 @@
-package com.example.myapplication.entities;
+package com.example.myapplication.model;
 
 public class Note {
+
     String title;
     long id;
 
-
-    public Note(String title) {
+    public Note(String title, long id) {
         this.title = title;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -24,4 +25,5 @@ public class Note {
     public void setId(long id) {
         this.id = id;
     }
+
 }
