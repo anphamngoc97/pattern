@@ -34,8 +34,9 @@ public class NoteController {
 
         view.updateList();
     }
-    public void delNote(long id){
-        noteModel.delTask(noteModel.columns[0],id);
+    public void delNote(int position,long id){
+        notes.remove(position);
+        noteModel.delTask(noteModel.columns[0] + " = " + id);
         view.updateList();
     }
 
@@ -46,7 +47,7 @@ public class NoteController {
             while (cursor.moveToNext()){
 
                 Note note = new Note(cursor.getString(1));
-                note.setId(cursor.getLong(1));
+                note.setId(cursor.getLong(0));
                 notes.add(note);
             }
         }

@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements NoteView, OnClick
 
     @Override
     public void onRemoveClick(int position) {
-        controller.delNote(notes.get(position).getId());
+
+        controller.delNote(position,notes.get(position).getId());
     }
 
     @Override

@@ -41,8 +41,8 @@ public class NoteModel {
 
 
     }
-    public void delTask(String whereClause,long id){
-        database.delete(TABLE_NAME,whereClause +" = " + id,null);
+    public void delTask(String whereClause){
+        database.delete(TABLE_NAME,whereClause,null);
     }
     public Cursor getAll(){
         Cursor cursor = database.query(TABLE_NAME,null,
