@@ -1,9 +1,8 @@
-package com.example.myapplication.model;
+package com.example.myapplication.service.model;
 
 public class Note {
-
-    String title;
-    long id;
+    public String title;
+    public long id;
 
     public Note(String title, long id) {
         this.title = title;
@@ -25,5 +24,4 @@ public class Note {
     public void setId(long id) {
         this.id = id;
     }
-
 }

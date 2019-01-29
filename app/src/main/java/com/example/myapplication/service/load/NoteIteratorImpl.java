@@ -1,15 +1,18 @@
-package com.example.myapplication.model;
+package com.example.myapplication.service.load;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.myapplication.service.model.Note;
+import com.example.myapplication.service.model.NoteIterator;
 
 import java.util.ArrayList;
 
-public class NoteIteratorImp implements NoteIterator  {
-
+public class NoteIteratorImpl implements NoteIterator {
     ArrayList<Note> notes = new ArrayList<>();
 
     private final String DB_NAME= "NOTE_DB";
@@ -21,7 +24,7 @@ public class NoteIteratorImp implements NoteIterator  {
     SQLiteDatabase database;
 
 
-    public  NoteIteratorImp (Context context){
+    public NoteIteratorImpl(Context context){
         SQLiteOpenHelper helper = new SQLiteOpenHelper(context,DB_NAME,null,VERSION) {
             @Override
             public void onCreate(SQLiteDatabase db) {
@@ -40,13 +43,14 @@ public class NoteIteratorImp implements NoteIterator  {
 
 
     }
-    public long addTask(ContentValues values){
+    private long addTask(ContentValues values){
+        Log.d("AAA","add in sqlite");
         long id = database.insert(TABLE_NAME,null,values);
         return id;
 
 
     }
-    public void delTask(String whereClause){
+    private void delTask(String whereClause){
         database.delete(TABLE_NAME,whereClause,null);
     }
     public Cursor getAll(){
@@ -55,6 +59,7 @@ public class NoteIteratorImp implements NoteIterator  {
 
         return cursor;
     }
+
 
     @Override
     public void load(LoadItemListener loadItemListener) {
@@ -74,6 +79,7 @@ public class NoteIteratorImp implements NoteIterator  {
 
     @Override
     public long addNote(LoadItemListener itemListener, String title) {
+
         ContentValues values = new ContentValues();
         values.put(columns[1],title);
 
@@ -83,14 +89,14 @@ public class NoteIteratorImp implements NoteIterator  {
 
         itemListener.onChangeFinish();
         return id;
+
     }
 
     @Override
-    public void delNote(LoadItemListener itemListener, int position) {
-        delTask(columns[0]+ " = " + notes.get(position).getId());
-        notes.remove(position);
+    public void delNote(LoadItemListener itemListener, long id) {
+        //delTask(columns[0]+ " = " + notes.get(position).getId());
+        delTask(columns[0]+ " = " + id);
+        //notes.remove(position);
         itemListener.onChangeFinish();
     }
-
-
 }

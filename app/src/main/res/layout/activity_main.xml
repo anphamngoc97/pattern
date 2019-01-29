@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.ui.MainActivity">
+
+    <data>
+        <import type="java.util.ArrayList"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.myapplication.viewmodel.NoteViewModel"/>
+
+    </data>
+<android.support.constraint.ConstraintLayout
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.MainActivity"
-    app:layout_constraintVertical_chainStyle="packed"
-    >
-
+    app:layout_constraintVertical_chainStyle="packed">
     <android.support.constraint.ConstraintLayout
         android:id="@+id/groupAdd"
         android:layout_height="0dp"
@@ -21,6 +30,7 @@
         app:layout_constraintHorizontal_chainStyle="packed">
         <EditText
             android:id="@+id/editNote"
+            android:text="@={viewModel.textNote}"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toTopOf="parent"
@@ -33,6 +43,7 @@
             android:id="@+id/btnAdd"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:onClick="@{()->viewModel.addNote()}"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/editNote"
             app:layout_constraintRight_toRightOf="parent"
@@ -41,6 +52,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycleNote"
+
+        app:adapter="@{viewModel.adapter}"
+        app:data="@{viewModel.getNotes}"
+        android:background="#ff0"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -52,3 +67,5 @@
 
 
 </android.support.constraint.ConstraintLayout>
+
+</layout>
